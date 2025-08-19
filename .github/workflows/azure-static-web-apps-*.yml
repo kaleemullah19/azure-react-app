@@ -1,0 +1,70 @@
+```yaml
+# Azure Static Web Apps CI/CD workflow file
+
+# Build and deploy configuration for Azure Static Web Apps
+# For more information, visit: https://docs.microsoft.com/azure/static-web-apps/github-actions
+
+name: Azure Static Web Apps CI/CD
+
+on:
+  push:
+    branches:
+      - main # Replace with your default branch if it's not 'main'
+  pull_request:
+    branches:
+      - main # Replace with your default branch if it's not 'main'
+
+jobs:
+  build_and_deploy_job:
+    # You can change the name of the job to anything you like
+    name: Build and Deploy Job
+    # The 'on' section above defines when this job will run
+    # This job will run on every push or pull request to the 'main' branch
+
+    # Define the environment variables for the job
+    env:
+      # The name of your Azure Static Web App
+      # This should match the name of your Static Web App in Azure
+      AZURE_STATIC_WEB_APPS_API_TOKEN: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+
+    # Define the steps for the job
+    steps:
+      # Step 1: Checkout the code from the repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Setup Node.js environment
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16' # Use the Node.js version that matches your project
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Build the app
+      - name: Build the app
+        run: npm run build
+
+      # Step 5: Deploy to Azure Static Web Apps
+      - name: Deploy to Azure Static Web Apps
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          # The name of your Azure Static Web App
+          # This should match the name of your Static Web App in Azure
+          azure_static_web_apps_name: '<YOUR_STATIC_WEB_APP_NAME>'
+          # The output location for the built app
+          # Change this from "build" to "dist" for Vite projects
+          output_location: 'dist'
+          # The app location in your repository
+          app_location: '/'
+          # The API location in your repository (if any)
+          api_location: ''
+          # The branch to deploy from
+          # This should match the branch in the 'on' section above
+          branch: 'main'
+          # The token for Azure Static Web Apps API
+          # This should be stored as a secret in your repository
+          token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+```
